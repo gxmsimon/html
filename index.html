@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simon 的简易下载站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.62), rgba(0,0,0,0.72)),
+            url("https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: system-ui, -apple-system, sans-serif;
+            color: #ffffff;
+            padding: 32px 16px;
+        }
+        .container {
+            max-width:780px;
+            margin:0 auto;
+        }
+        .time-box {
+            background: rgba(255,255,255,0.07);
+            backdrop-filter: blur(14px);
+            border-radius:20px;
+            text-align:center;
+            padding:24px;
+            border:1px solid rgba(255,255,255,0.16);
+            margin-bottom:28px;
+            box-shadow: 0 0 24px rgba(90,140,255,0.22);
+        }
+        #datetime {
+            font-size:24px;
+            font-weight:500;
+            letter-spacing:2px;
+            text-shadow:0 0 10px #6495ed;
+        }
+        .main-card {
+            background-color: rgba(255,255,255,0.07);
+            backdrop-filter: blur(16px);
+            padding:48px 36px;
+            border-radius:24px;
+            border:1px solid rgba(255,255,255,0.16);
+            box-shadow:0 10px 45px rgba(0,0,0,0.45);
+            margin-bottom:28px;
+            transition:0.35s ease;
+        }
+        .main-card:hover{
+            transform: translateY(-5px);
+            box-shadow:0 14px 55px rgba(110, 90, 255,0.3);
+        }
+        .main-card h1{
+            font-size:32px;
+            margin-bottom:14px;
+            text-shadow: 0 0 10px #7c68ff;
+        }
+        .intro{
+            color:#e2e8f0;
+            font-size:17px;
+            margin-bottom:36px;
+        }
+        .btn-group{
+            display:grid;
+            grid-template-columns: 1fr 1fr;
+            gap:16px;
+        }
+        .download-btn {
+            padding:18px;
+            border:none;
+            border-radius:14px;
+            font-size:24px;
+            font-weight:600;
+            cursor:pointer;
+            background: linear-gradient(90deg,#00adb5,#722ed1);
+            color:white;
+            transition: 0.3s ease;
+            box-shadow:0 0 15px rgba(114,46,209,0.35);
+        }
+        .download-btn:hover{
+            transform: translateY(-4px);
+            box-shadow:0 0 28px rgba(114,46,209,0.6);
+        }
+        .mirror-btn {
+            padding:18px;
+            border:none;
+            border-radius:14px;
+            font-size:18px;
+            font-weight:600;
+            cursor:pointer;
+            background: linear-gradient(90deg,#20a050,#00b894);
+            color:white;
+            transition: 0.3s ease;
+            box-shadow:0 0 15px rgba(0,184,148,0.35);
+        }
+        .mirror-btn:hover{
+            transform: translateY(-4px);
+            box-shadow:0 0 28px rgba(0,184,148,0.6);
+        }
+        .official-card{
+            background-color: rgba(255,255,255,0.07);
+            backdrop-filter: blur(16px);
+            padding:28px 36px;
+            border-radius:24px;
+            border:1px solid rgba(255,255,255,0.16);
+            text-align:center;
+            box-shadow:0 10px 45px rgba(0,0,0,0.45);
+            margin-bottom:28px;
+        }
+        .official-card h2{
+            font-size:22px;
+            margin-bottom:10px;
+        }
+        .software-card{
+            background-color: rgba(255,255,255,0.07);
+            backdrop-filter: blur(16px);
+            padding:34px;
+            border-radius:24px;
+            border:1px solid rgba(255,255,255,0.16);
+            box-shadow:0 10px 45px rgba(0,0,0,0.45);
+        }
+        .software-card h2{
+            text-align:center;
+            margin-bottom:24px;
+            font-size:24px;
+            text-shadow: 0 0 8px #ffa500;
+        }
+        .software-wrap{
+            display:grid;
+            grid-template-columns: repeat(auto-fit,minmax(150px,1fr));
+            gap:18px;
+        }
+        .software-item{
+            background:rgba(255,255,255,0.08);
+            padding:24px 12px;
+            border-radius:16px;
+            text-align:center;
+            cursor:pointer;
+            transition:0.3s;
+            border:1px solid rgba(255,255,255,0.1);
+        }
+        .software-item:hover{
+            background:rgba(255,255,255,0.16);
+            transform:scale(1.05);
+            box-shadow:0 0 20px rgba(255,165,0,0.45);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 时间日期区域 -->
+    <div class="time-box">
+        <div id="datetime"></div>
+    </div>
+
+    <!-- 下载站主体 -->
+    <div class="main-card">
+        <h1>Simon 的简易下载站</h1>
+        <p class="intro">一个简单的下载站</p>
+        <div class="btn-group">
+            <button class="download-btn" id="downloadBtn">↓</button>
+            <button class="mirror-btn" id="mirrorBtn">镜像下载</button>
+        </div>
+    </div>
+
+    <!-- 公众号板块 -->
+    <div class="official-card">
+        <h2>📢 关注公众号</h2>
+        <p>机库资源社</p>
+    </div>
+
+    <!-- 常用软件下载区 -->
+    <div class="software-card">
+        <h2>📦 常用软件下载</h2>
+        <div class="software-wrap">
+            <div class="software-item">PotPlayer 64位</div>
+            <div class="software-item">火绒安全</div>
+            <div class="software-item">激活软件KMS</div>
+            <div class="software-item">Office tool with run time</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //====================【在这里修改配置】====================
+    const downloadUrl = "https://www.yunshang300.com/next/files"; //主下载链接，改成你的
+    const mirrorUrl = "https://next.itellyou.cn/Original/"; //镜像下载 Next I tell you
+    //软件下载链接，依次对应上面4个软件
+    const softwareLinks = [
+        "https://potplayer.tv/?dl=64bit", // PotPlayer 64位
+        "https://www.huorong.cn/down.html", //火绒安全
+        "https://www.yunshang300.com/f/JW8hX/HEU_KMS_Activator_v64.0.0.iso", 
+        "https://www.yunshang300.com/f/7JKUN/Office_Tool_with_runtime_v11.6.6.0_x64.zip"  //自定义软件B，自己填链接
+    ];
+    //==========================================================
+
+    //更新时间日期
+    function updateTime(){
+        const now = new Date();
+        document.getElementById("datetime").innerText = now.toLocaleString("zh-CN");
+    }
+    updateTime();
+    setInterval(updateTime,1000);
+
+    //主下载按钮
+    document.getElementById("downloadBtn").addEventListener("click",()=>{
+        window.open(downloadUrl,"_blank");
+    })
+    //镜像下载按钮
+    document.getElementById("mirrorBtn").addEventListener("click",()=>{
+        window.open(mirrorUrl,"_blank");
+    })
+
+    //软件卡片点击跳转
+    const softwareDom = document.querySelectorAll(".software-item");
+    softwareDom.forEach((el,idx)=>{
+        el.addEventListener("click",()=>{
+            if(softwareLinks[idx]){
+                window.open(softwareLinks[idx],"_blank");
+            }else{
+                alert("该软件链接暂未配置，请在代码内填写");
+            }
+        })
+    })
+</script>
+</body>
+</html>
