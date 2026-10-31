@@ -3,565 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>装机软件大全 - 官方原版下载站</title>
+    <title>装机软件合集</title>
+    <script>
+        // 明暗主题切换
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        }
+        // 加载保存的主题
+        window.onload = function(){
+            if(localStorage.getItem('theme') === 'dark'){
+                document.body.classList.add('dark');
+            }
+            updateTime();
+            setInterval(updateTime,1000);
+        }
+        // 实时时间
+        function updateTime(){
+            const now = new Date();
+            document.getElementById('time').innerText = now.toLocaleString('zh-CN');
+        }
+        // 分类折叠展开
+        function toggleCat(id){
+            const el = document.getElementById(id);
+            const titleEl = el.previousElementSibling;
+            if(el.classList.contains('open')){
+                el.classList.remove('open');
+                titleEl.querySelector('span').textContent = '▼';
+            }else{
+                el.classList.add('open');
+                titleEl.querySelector('span').textContent = '▲';
+            }
+        }
+        // 搜索过滤
+        function searchSoft(){
+            const kw = document.getElementById('search').value.toLowerCase();
+            const items = document.querySelectorAll('.soft-item');
+            items.forEach(item=>{
+                const txt = item.innerText.toLowerCase();
+                if(txt.includes(kw)){
+                    item.style.display = 'flex';
+                }else{
+                    item.style.display = 'none';
+                }
+            })
+        }
+    </script>
     <style>
-        :root {
-            --bg: #f3f4f6;
-            --card: #ffffff;
-            --text: #111827;
-            --text2: #666666;
-            --primary: #2563eb;
-            --warningBg: #fffbeb;
-            --warningBorder: #fbbf24;
-            --border: #eeeeee;
-            --btnHover: #1d4ed8;
+        :root{
+            --bg:#ffffff;
+            --text:#222;
+            --card:#f6f8fa;
+            --blue:#1677ff;
+            --green:#00b42a;
+            --orange:#ff7d00;
+            --purple:#722ed1;
+            --border:#ddd;
         }
-        [data-theme="dark"] {
-            --bg: #121212;
-            --card: #1f1f1f;
-            --text: #e5e7eb;
-            --text2: #aaaaaa;
-            --primary: #3b82f6;
-            --warningBg: #2c2616;
-            --warningBorder: #92400e;
-            --border: #333333;
-            --btnHover: #2563eb;
+        .dark{
+            --bg:#1a1a1a;
+            --text:#eee;
+            --card:#2d2d2d;
+            --blue:#4096ff;
+            --green:#23c845;
+            --orange:#ff9c38;
+            --purple:#9254de;
+            --border:#444;
         }
-        * {
-            margin:0;
-            padding:0;
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, sans-serif;
+        *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui, sans-serif;}
+        body{background:var(--bg);color:var(--text);padding:16px;transition:0.3s}
+        .header{
+            display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+            background:var(--blue);color:#fff;padding:16px;border-radius:12px;margin-bottom:12px;
         }
-        body{
-            background:var(--bg);
-            color:var(--text);
-            padding:20px;
-            max-width:1200px;
-            margin:0 auto;
-            transition: background 0.3s, color 0.3s;
+        .header h1{font-size:22px}
+        .header-buttons{display:flex;gap:8px;flex-wrap:wrap}
+        .header-btn{
+            padding:8px 10px;border:none;border-radius:8px;font-size:14px;cursor:pointer;text-decoration:none;color:#fff;
         }
-        header{
-            background:var(--primary);
-            color:white;
-            padding:24px;
-            border-radius:12px;
-            margin-bottom:20px;
-            position:relative;
+        .btn-netdisk{background:var(--green);}
+        .btn-winiso{background:var(--orange);}
+        .btn-officeiso{background:#f5222d;}
+        .btn-theme{background:var(--purple);}
+        .time-info{background:var(--card);padding:10px;border-radius:10px;margin-bottom:12px}
+        .notice{
+            background:#fffbe6;border:1px solid #ffe58f;color:#ad6800;
+            padding:14px;border-radius:10px;margin-bottom:16px;
         }
-        .theme-switch{
-            position:absolute;
-            right:20px;
-            top:20px;
-            padding:8px 12px;
-            border:none;
-            border-radius:8px;
-            cursor:pointer;
+        .search-box{width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:16px;margin-bottom:16px}
+        .category{margin-bottom:10px;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card)}
+        .cat-title{padding:12px 16px;cursor:pointer;font-weight:bold;display:flex;justify-content:space-between;align-items:center}
+        .cat-body{padding:0 16px;max-height:0;overflow:hidden;transition:max-height 0.3s ease;}
+        .cat-body.open{max-height:2200px;padding:0 16px;}
+        .soft-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);gap:10px}
+        .soft-item:last-child{border-bottom:none}
+        .soft-name{flex:1}
+        .down-btn{
+            background:var(--blue);color:#fff;padding:8px 12px;border-radius:6px;text-decoration:none;font-size:14px;white-space:nowrap
         }
-        h1{
-            font-size:26px;
-            margin-bottom:12px;
-        }
-        .time-text{
-            font-size:15px;
-            margin-top:8px;
-        }
-        .tip{
-            opacity:0.9;
-            font-size:14px;
-        }
-        .disclaimer{
-            background:var(--warningBg);
-            border:1px solid var(--warningBorder);
-            padding:16px;
-            border-radius:12px;
-            margin-bottom:20px;
-            font-size:14px;
-            line-height:1.7;
-        }
-        .disclaimer h3{
-            margin-bottom:8px;
-        }
-        .action-bar{
-            display:flex;
-            gap:12px;
-            flex-wrap:wrap;
-            margin-bottom:20px;
-        }
-        .action-btn{
-            background:#16a34a;
-            color:white;
-            text-decoration:none;
-            padding:10px 16px;
-            border-radius:8px;
-            display:inline-block;
-        }
-        .action-btn.admin{
-            background:#7c3aed;
-        }
-        .search-box{
-            background:var(--card);
-            padding:16px;
-            border-radius:12px;
-            margin-bottom:20px;
-        }
-        #search{
-            width:100%;
-            padding:12px 16px;
-            border:1px solid var(--border);
-            border-radius:8px;
-            font-size:16px;
-            background:var(--card);
-            color:var(--text);
-        }
-        .category{
-            background:var(--card);
-            border-radius:12px;
-            padding:0;
-            margin-bottom:20px;
-            overflow:hidden;
-        }
-        .category-header{
-            padding:20px;
-            cursor:pointer;
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-        }
-        .category h2{
-            font-size:20px;
-            color:var(--text);
-            border-left:4px solid var(--primary);
-            padding-left:12px;
-        }
-        .category-content{
-            padding:0 20px 10px;
-            display:none;
-        }
-        .category.open .category-content{
-            display:block;
-        }
-        .item{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            padding:12px 0;
-            border-bottom:1px solid var(--border);
-        }
-        .item:last-child{
-            border-bottom:none;
-        }
-        .name{
-            font-size:15px;
-        }
-        .btn{
-            background:var(--primary);
-            color:white;
-            text-decoration:none;
-            padding:8px 14px;
-            border-radius:8px;
-            font-size:14px;
-        }
-        .btn:hover{
-            background:var(--btnHover);
-        }
-        .qrcode-area{
-            background:var(--card);
-            padding:20px;
-            border-radius:12px;
-            margin-bottom:20px;
-            text-align:center;
-        }
-        .qrcode-placeholder{
-            width:160px;
-            height:160px;
-            border:2px dashed var(--border);
-            margin:12px auto;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            color:var(--text2);
-        }
-        footer{
-            text-align:center;
-            padding:20px;
-            color:var(--text2);
-            font-size:14px;
-        }
+        .down-btn:hover{opacity:0.85}
+        footer{margin-top:30px;padding:16px;border:1px solid var(--border);border-radius:10px}
 
-        /* 后台登录 & 管理页面样式 */
-        .admin-page{
-            display:none;
+        /* 右下角悬浮工具窗 */
+        .float-tool{
+            position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:8px;z-index:999;
         }
-        .login-box{
-            max-width:420px;
-            margin:40px auto;
-            background:var(--card);
-            padding:30px;
-            border-radius:12px;
+        .float-btn{
+            padding:10px 14px;border-radius:99px;color:#fff;text-decoration:none;font-weight:bold;box-shadow:0 2px 10px #0003;
         }
-        .login-box h2{
-            margin-bottom:20px;
-        }
-        .login-box input{
-            width:100%;
-            padding:12px;
-            margin:8px 0 16px;
-            border:1px solid var(--border);
-            border-radius:8px;
-            background:var(--card);
-            color:var(--text);
-        }
-        .login-btn{
-            width:100%;
-            padding:12px;
-            border:none;
-            background:var(--primary);
-            color:white;
-            border-radius:8px;
-            font-size:16px;
-            cursor:pointer;
-        }
-        .manage-item{
-            padding:12px;
-            border:1px solid var(--border);
-            margin:8px 0;
-            border-radius:8px;
-        }
-        .hidden{
-            display:none !important;
-        }
+        .float-win{background:var(--orange)}
+        .float-office{background:#f5222d}
     </style>
 </head>
 <body>
-    <!-- 前台首页 -->
-    <div id="frontPage">
-        <header>
-            <h1>✅ 装机软件大全（82款）</h1>
-            <div class="tip">全部跳转官方原版下载页面，本站不存储任何安装包</div>
-            <div class="time-text">🕒 当前时间：<span id="clock"></span></div>
-            <button class="theme-switch" onclick="toggleTheme()">🌓 切换深色/浅色</button>
-        </header>
-
-        <div class="action-bar">
-            <a href="#" class="action-btn" onclick="alert('请替换为你的网盘分享链接！')">☁️ 网盘入口</a>
-            <a href="#" class="action-btn admin" onclick="showAdminLogin()">🔐 管理员后台</a>
-        </div>
-
-        <div class="disclaimer">
-            <h3>📜 使用协议与免责声明</h3>
-            <p>1. 本站仅提供外部官网/开源项目发布页的跳转链接，本站不存放任何软件安装包。</p>
-            <p>2. 外部链接有可能随官网改版、项目版本更新而失效。</p>
-            <p>3. 如果版权方认为链接存在侵权，请联系站长，收到通知后立即删除对应软件链接。</p>
-            <p>4. 全部软件著作权归原作者所有，下载使用软件请遵守该软件的许可协议。</p>
-            <p>5. 网站仅供个人学习参考，不对第三方软件的安全性、可用性做任何担保。</p>
-        </div>
-
-        <div class="qrcode-area">
-            <h3>📢 欢迎扫码关注公众号【机库资源社】获取更新通知</h3>
-            <div class="qrcode-placeholder">此处放置公众号二维码图片</div>
-        </div>
-
-        <div class="search-box">
-            <input type="text" id="search" placeholder="🔍 搜索软件名称..." oninput="filterItem()">
-        </div>
-
-        <!-- 软件列表容器，JS渲染 -->
-        <div id="softwareList"></div>
-
-        <footer>
-            <p>装机软件导航站 · 所有链接均跳转官方站点</p>
-        </footer>
+    <!-- 悬浮右下角 -->
+    <div class="float-tool">
+        <a href="https://hellowindows.cn/" target="_blank" class="float-btn float-win">🪟 Windows镜像下载</a>
+        <a href="https://next.itellyou.cn/" target="_blank" class="float-btn float-office">📦 Office镜像下载</a>
     </div>
 
-
-    <!-- 后台页面 -->
-    <div id="adminPage" class="admin-page">
-        <div class="login-box" id="loginForm">
-            <h2>管理员登录</h2>
-            <label>账号</label>
-            <input type="text" id="adminUser" placeholder="输入管理员账号">
-            <label>密码</label>
-            <input type="password" id="adminPwd" placeholder="输入管理员密码">
-            <button class="login-btn" onclick="adminLogin()">登录后台</button>
-            <p style="margin-top:12px;color:var(--text2)">默认账号：admin  密码：admin123</p>
-            <button style="margin-top:10px;width:100%;padding:10px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:8px;cursor:pointer" onclick="backHome()">返回首页</button>
+    <div class="header">
+        <h1>装机软件合集</h1>
+        <div class="header-buttons">
+            <a href="https://www.yunshang300.com/next/files" target="_blank" class="header-btn btn-netdisk">网盘入口</a>
+            <a href="https://hellowindows.cn/" target="_blank" class="header-btn btn-winiso">Windows镜像下载</a>
+            <a href="https://next.itellyou.cn/" target="_blank" class="header-btn btn-officeiso">Office镜像下载</a>
+            <button class="header-btn btn-theme" onclick="toggleTheme()">切换深色/浅色</button>
         </div>
+    </div>
+    <div class="time-info">
+        ⏱️ 当前时间：<span id="time"></span>
+    </div>
+    <div class="notice">
+        <p>📜 使用协议与免责声明</p>
+        <p>1.本网站仅提供外部官网/开源项目发布页的跳转链接，本站不存储任何软件安装包与系统镜像。</p>
+        <p>2.外部链接有可能随官网改版、项目版本更新而失效。</p>
+        <p>3.如果版权方认为链接存在侵权，请联系站长，收到通知后立即删除对应链接。</p>
+        <p>4.全部软件/镜像著作权归原作者所有，下载使用请遵守软件许可协议。</p>
+        <p>5.网站仅供个人学习参考，不对第三方资源的安全性、可用性做任何担保。</p>
+    </div>
+    <input class="search-box" id="search" placeholder="🔍 搜索软件名称..." oninput="searchSoft()">
 
-        <div id="managePanel" class="hidden">
-            <header>
-                <h1>🔧 软件管理后台</h1>
-                <div class="time-text">🕒 当前时间：<span id="adminClock"></span></div>
-                <button onclick="logoutAdmin()" style="margin-top:10px;padding:8px 12px;border-radius:8px;border:none;background:#dc2626;color:white;cursor:pointer">退出登录</button>
-                <button class="theme-switch" onclick="toggleTheme()">🌓 切换深色/浅色</button>
-            </header>
-            <div style="background:var(--card);padding:20px;border-radius:12px;margin-bottom:20px;">
-                <h3>➕ 添加新软件</h3>
-                <input type="text" id="newName" placeholder="软件名称" style="width:100%;padding:10px;margin:8px 0;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);">
-                <input type="text" id="newLink" placeholder="跳转链接" style="width:100%;padding:10px;margin:8px 0;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);">
-                <select id="newBtnText" style="width:100%;padding:10px;margin:8px 0;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);">
-                    <option value="前往官方下载">前往官方下载</option>
-                    <option value="GitHub Releases（自选32位/64位安装包）">GitHub Releases（自选32位/64位安装包）</option>
-                </select>
-                <button onclick="addSoftware()" style="width:100%;padding:10px;border:none;background:var(--primary);color:white;border-radius:8px;cursor:pointer;">添加软件</button>
-            </div>
-            <div id="manageList"></div>
+    <!-- 浏览器 -->
+    <div class="category">
+        <div class="cat-title" onclick="toggleCat('cat-browser')">🌐 浏览器 <span>▼</span></div>
+        <div class="cat-body" id="cat-browser">
+            <div class="soft-item"><div class="soft-name">Google Chrome</div><a href="https://www.google.com/chrome/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">360极速浏览器X</div><a href="https://browser.360.cn/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">世界之窗浏览器</div><a href="http://www.theworld.cn/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Supermium</div><a href="https://github.com/win32ss/supermium/releases" target="_blank" class="down-btn">GitHub Releases（自选32位/64位安装包）</a></div>
+            <div class="soft-item"><div class="soft-name">Microsoft Edge</div><a href="https://www.microsoft.com/zh-cn/edge" target="_blank" class="down-btn">前往官方下载</a></div>
         </div>
     </div>
 
+    <!-- 系统优化工具 -->
+    <div class="category">
+        <div class="cat-title" onclick="toggleCat('cat-system')">⚙️ 系统优化工具 <span>▼</span></div>
+        <div class="cat-body" id="cat-system">
+            <div class="soft-item"><div class="soft-name">Dism++</div><a href="https://chuyu.me/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">图吧工具箱</div><a href="https://shturl.cc/XKDqnBDRfMBM" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">微PE工具箱</div><a href="https://www.wepe.com.cn/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">HotPE</div><a href="https://hotpe.top/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Everything</div><a href="https://www.voidtools.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Memory Doctor</div><a href="https://github.com/henrypp/memory-doctor" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">CrystalDiskInfo（硬盘检测）</div><a href="https://crystalmark.info/zh-hans/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">CrystalDiskMark（硬盘测速）</div><a href="https://crystalmark.info/zh-hans/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Next Windows（镜像站）</div><a href="https://next.itellyou.cn/" target="_blank" class="down-btn">打开镜像站</a></div>
+            <div class="soft-item"><div class="soft-name">Hello Windows（镜像站）</div><a href="https://hellowindows.cn/" target="_blank" class="down-btn">打开镜像站</a></div>
+        </div>
+    </div>
 
-<script>
-// 原始82款软件数据
-let softwareData = [
-    {cat:"🌐 浏览器", list:[
-        {name:"Google Chrome", link:"https://www.google.cn/chrome/", btn:"前往官方下载"},
-        {name:"360极速浏览器X", link:"https://browser.360.cn/ee/", btn:"前往官方下载"},
-        {name:"世界之窗浏览器", link:"https://www.theworldbrowser.com/", btn:"前往官方下载"},
-        {name:"Supermium", link:"https://github.com/win32ss/supermium/releases", btn:"GitHub Releases（自选32位/64位安装包）"},
-        {name:"Microsoft Edge", link:"https://www.microsoft.com/zh-cn/edge/download", btn:"前往官方下载"},
-    ]},
-    {cat:"⚙️ 系统优化工具", list:[
-        {name:"Dism++", link:"https://chuyu.me/", btn:"前往官方下载"},
-        {name:"图吧工具箱", link:"https://tuba.tools/", btn:"前往官方下载"},
-        {name:"微PE工具箱", link:"https://www.wepe.com.cn/", btn:"前往官方下载"},
-        {name:"HotPE", link:"https://hotpe.top/", btn:"前往官方下载"},
-        {name:"Everything", link:"https://www.voidtools.com/zh-cn/", btn:"前往官方下载"},
-        {name:"Memory Doctor", link:"https://memorydoctor.app/", btn:"前往官方下载"},
-        {name:"CrystalDiskInfo（硬盘检测）", link:"https://crystalmark.info/ja/software/crystaldiskinfo/", btn:"前往官方下载"},
-        {name:"CrystalDiskMark（硬盘测速）", link:"https://crystalmark.info/ja/software/crystaldiskmark/", btn:"前往官方下载"},
-    ]},
-    {cat:"🛡️ 安全软件", list:[
-        {name:"火绒安全软件", link:"https://www.huorong.cn/", btn:"前往官方下载"},
-        {name:"卡巴斯基", link:"https://www.kaspersky.com.cn/", btn:"前往官方下载"},
-        {name:"诺顿Norton", link:"https://cn.norton.com/", btn:"前往官方下载"},
-        {name:"Bitdefender比特梵德", link:"https://www.bitdefender.com.cn/", btn:"前往官方下载"},
-        {name:"Avast", link:"https://www.avast.com/zh-cn/index", btn:"前往官方下载"},
-    ]},
-    {cat:"📚 教育专用", list:[
-        {name:"GeoGebra", link:"https://www.geogebra.org/", btn:"前往官方下载"},
-        {name:"Scratch", link:"https://scratch.mit.edu/", btn:"前往官方下载"},
-        {name:"Typora", link:"https://typora.io/", btn:"前往官方下载"},
-        {name:"ClassIn", link:"https://www.classin.com/", btn:"前往官方下载"},
-        {name:"ClassIsland（课表软件）", link:"https://github.com/ClassIsland/ClassIsland/releases", btn:"GitHub Releases（自选32位/64位安装包）"},
-        {name:"Class Widgets（桌面课表小组件）", link:"https://github.com/RinLit-233-shiroko/Class-Widgets/releases", btn:"GitHub Releases（自选32位/64位安装包）"},
-        {name:"ICC‑CE（老批注软件）", link:"https://icc-ce.com/", btn:"前往官方下载"},
-        {name:"SecRandom（点名抽奖）", link:"https://github.com/SecRandom/SecRandom/releases", btn:"GitHub Releases（自选32位/64位安装包）"},
-        {name:"NamePicker（点名抽奖）", link:"https://github.com/NamePicker/NamePicker/releases", btn:"GitHub Releases（自选32位/64位安装包）"},
-        {name:"希沃白板5", link:"https://easinote.seewo.com/", btn:"前往官方下载"},
-        {name:"希沃轻白板5C", link:"https://www.seewo.com/", btn:"前往官方下载"},
-        {name:"班级优化大师（PC版）", link:"https://care.seewo.com/", btn:"前往官方下载"},
-        {name:"希沃品课", link:"https://pinke.seewo.com/", btn:"前往官方下载"},
-        {name:"鸿合白板", link:"https://www.hitecloud.cn/", btn:"前往官方下载"},
-        {name:"希沃视频展台", link:"https://www.seewo.com/", btn:"前往官方下载"},
-        {name:"鸿合视频展台", link:"https://www.hitecloud.cn/", btn:"前往官方下载"},
-        {name:"希沃演示助手", link:"https://www.seewo.com/", btn:"前往官方下载"},
-        {name:"鸿合放映助手", link:"https://www.hitecloud.cn/", btn:"前往官方下载"},
-        {name:"希沃PPT小工具", link:"https://www.seewo.com/", btn:"前往官方下载"},
-        {name:"希沃剪辑师（微课录制）", link:"https://www.seewo.com/", btn:"前往官方下载"},
-        {name:"希沃管家（机房管控）", link:"https://www.seewo.com/", btn:"前往官方下载"},
-        {name:"希沃易课堂", link:"https://www.seewo.com/", btn:"前往官方下载"},
-        {name:"鸿合多屏互动", link:"https://www.hitecloud.cn/", btn:"前往官方下载"},
-        {name:"鸿合授课助手", link:"https://www.hitecloud.cn/", btn:"前往官方下载"},
-        {name:"希沃快传", link:"https://www.seewo.com/", btn:"前往官方下载"},
-    ]},
-    {cat:"🎬 多媒体", list:[
-        {name:"VLC播放器", link:"https://www.videolan.org/vlc/", btn:"前往官方下载"},
-        {name:"PotPlayer", link:"https://potplayer.tv/", btn:"前往官方下载"},
-        {name:"OBS Studio", link:"https://github.com/obsproject/obs-studio/releases", btn:"GitHub Releases（自选32位/64位安装包）"},
-        {name:"剪映专业版", link:"https://www.capcut.cn/", btn:"前往官方下载"},
-        {name:"格式工厂", link:"https://www.pcfreetime.com/", btn:"前往官方下载"},
-        {name:"哔哩哔哩PC版", link:"https://app.bilibili.com/", btn:"前往官方下载"},
-    ]},
-    {cat:"💬 通讯社交", list:[
-        {name:"QQ PC版", link:"https://im.qq.com/", btn:"前往官方下载"},
-        {name:"微信PC版", link:"https://pc.weixin.qq.com/", btn:"前往官方下载"},
-        {name:"企业微信PC版", link:"https://work.weixin.qq.com/", btn:"前往官方下载"},
-    ]},
-    {cat:"📄 办公软件", list:[
-        {name:"WPS", link:"https://www.wps.cn/", btn:"前往官方下载"},
-        {name:"LibreOffice", link:"https://www.libreoffice.org/", btn:"前往官方下载"},
-        {name:"Office Tool Plus", link:"https://otp.landiansoft.com/", btn:"前往官方下载"},
-        {name:"ezPDF Editor", link:"https://www.ezpdf.com/", btn:"前往官方下载"},
-    ]},
-    {cat:"💻 开发工具", list:[
-        {name:"VS Code", link:"https://code.visualstudio.com/", btn:"前往官方下载"},
-        {name:"Git", link:"https://git-scm.com/", btn:"前往官方下载"},
-        {name:"VirtualBox", link:"https://www.virtualbox.org/", btn:"前往官方下载"},
-        {name:"Notepad++", link:"https://notepad-plus-plus.org/", btn:"前往官方下载"},
-        {name:"VMware虚拟机", link:"https://www.vmware.com/", btn:"前往官方下载"},
-        {name:"MuMu模拟器", link:"https://mumu.163.com/", btn:"前往官方下载"},
-        {name:"FastGithub（GitHub加速工具）", link:"https://github.com/dotnetcore/FastGithub/releases", btn:"GitHub Releases（自选32位/64位安装包）"},
-    ]},
-    {cat:"📥 网络工具 & 压缩", list:[
-        {name:"IDM", link:"https://www.internetdownloadmanager.com/", btn:"前往官方下载"},
-        {name:"FDM", link:"https://www.freedownloadmanager.org/", btn:"前往官方下载"},
-        {name:"XDM", link:"https://xtremedownloadmanager.com/", btn:"前往官方下载"},
-        {name:"迅雷", link:"https://www.xunlei.com/", btn:"前往官方下载"},
-        {name:"7‑Zip", link:"https://www.7-zip.org/", btn:"前往官方下载"},
-        {name:"WinRAR", link:"https://www.win-rar.com/", btn:"前往官方下载"},
-        {name:"360压缩", link:"https://yasuo.360.cn/", btn:"前往官方下载"},
-    ]},
-    {cat:"🖥️ 远程控制", list:[
-        {name:"UU远程（网易UU远程）", link:"https://uu.163.com/remote/", btn:"前往官方下载"},
-        {name:"TeamViewer", link:"https://www.teamviewer.com/", btn:"前往官方下载"},
-        {name:"AnyDesk", link:"https://anydesk.com/", btn:"前往官方下载"},
-        {name:"向日葵远程控制", link:"https://sunlogin.oray.com/", btn:"前往官方下载"},
-        {name:"ToDesk", link:"https://todesk.com/", btn:"前往官方下载"},
-    ]},
-    {cat:"🎮 游戏专区", list:[
-        {name:"Steam", link:"https://store.steampowered.com/", btn:"前往官方下载"},
-        {name:"WeGame", link:"https://www.wegame.com.cn/", btn:"前往官方下载"},
-        {name:"外星仔加速器", link:"https://www.waixingzai.com/", btn:"前往官方下载"},
-        {name:"网易发烧游戏", link:"https://game.163.com/", btn:"前往官方下载"},
-        {name:"网易UU加速器", link:"https://uu.163.com/download/", btn:"前往官方下载"},
-    ]},
-    {cat:"📱手机APP专区", list:[
-        {name:"豆包AI手机版", link:"https://www.doubao.com/app", btn:"前往官方下载"},
-        {name:"微信手机版", link:"https://weixin.qq.com/", btn:"前往官方下载"},
-        {name:"哔哩哔哩手机版", link:"https://app.bilibili.com/mobile/android.html", btn:"前往官方下载"},
-        {name:"Edge浏览器手机版", link:"https://www.microsoft.com/zh-cn/edge/download", btn:"前往官方下载"},
-        {name:"通义千问手机版", link:"https://qianwen.com/app", btn:"前往官方下载"},
-    ]}
-];
+    <!-- 安全软件 -->
+    <div class="category">
+        <div class="cat-title" onclick="toggleCat('cat-security')">🛡️ 安全软件 <span>▼</span></div>
+        <div class="cat-body" id="cat-security">
+            <div class="soft-item"><div class="soft-name">火绒安全软件</div><a href="https://www.huorong.cn/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">卡巴斯基</div><a href="https://www.kaspersky.com.cn/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">诺顿Norton</div><a href="https://cn.norton.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Bitdefender比特梵德</div><a href="https://www.bitdefender.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Avast</div><a href="https://www.avast.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">360杀毒</div><a href="https://sd.360.cn/" target="_blank" class="down-btn">前往官方下载</a></div>
+        </div>
+    </div>
 
-// 主题
-function loadTheme(){
-    const t = localStorage.getItem("siteTheme");
-    if(t) document.documentElement.setAttribute("data-theme", t);
-}
-function toggleTheme(){
-    const now = document.documentElement.getAttribute("data-theme");
-    if(now === "dark"){
-        document.documentElement.removeAttribute("data-theme");
-        localStorage.setItem("siteTheme","light");
-    }else{
-        document.documentElement.setAttribute("data-theme","dark");
-        localStorage.setItem("siteTheme","dark");
-    }
-}
+    <!-- 教育专用 -->
+    <div class="category">
+        <div class="cat-title" onclick="toggleCat('cat-edu')">📚 教育专用 <span>▼</span></div>
+        <div class="cat-body" id="cat-edu">
+            <div class="soft-item"><div class="soft-name">GeoGebra</div><a href="https://www.geogebra.org/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Scratch</div><a href="https://scratch.mit.edu/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Typora</div><a href="https://typora.io/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">ClassIn</div><a href="https://www.eeo.cn/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">ClassIsland（课表软件）</div><a href="https://github.com/ClassIsland/ClassIsland/releases" target="_blank" class="down-btn">GitHub Releases（自选32位/64位安装包）</a></div>
+            <div class="soft-item"><div class="soft-name">Class Widgets（桌面小组件）</div><a href="https://github.com/ClassWidgets/ClassWidgets/releases" target="_blank" class="down-btn">GitHub Releases（自选32位/64位安装包）</a></div>
+            <div class="soft-item"><div class="soft-name">Icc-ce（老批注软件）</div><a href="https://www.icc-ce.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">SecRandom（点名抽奖）</div><a href="https://github.com/SecRandom/SecRandom/releases" target="_blank" class="down-btn">GitHub Releases（自选32位/64位安装包）</a></div>
+            <div class="soft-item"><div class="soft-name">NamePicker（点名抽奖）</div><a href="https://github.com/NamePicker/NamePicker/releases" target="_blank" class="down-btn">GitHub Releases（自选32位/64位安装包）</a></div>
+            <div class="soft-item"><div class="soft-name">希沃白板5</div><a href="https://easinote.seewo.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">希沃白板5C</div><a href="https://easinote.seewo.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">班级优化大师（PC版）</div><a href="https://www.seewo.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">希沃品课</div><a href="https://www.seewo.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">鸿合白板</div><a href="https://www.hitevision.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">希沃视频展台</div><a href="https://www.seewo.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">鸿合视频展台</div><a href="https://www.hitevision.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">希沃演示助手</div><a href="https://www.seewo.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">鸿合授课助手</div><a href="https://www.hitevision.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">希沃PPT小工具</div><a href="https://www.seewo.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">希沃剪辑师（微课录制）</div><a href="https://www.seewo.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">希沃管家（机房管控）</div><a href="https://www.seewo.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">希沃易课堂</div><a href="https://www.seewo.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">鸿合多屏互动</div><a href="https://www.hitevision.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">希沃快传</div><a href="https://www.seewo.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+        </div>
+    </div>
 
-// 渲染前台软件列表 + 折叠分类
-function renderList(){
-    const wrap = document.getElementById("softwareList");
-    wrap.innerHTML = "";
-    softwareData.forEach((cate,cateIndex)=>{
-        let html = `
-        <div class="category">
-            <div class="category-header" onclick="toggleCategory(${cateIndex})">
-                <h2>${cate.cat}</h2>
-                <span>▼</span>
-            </div>
-            <div class="category-content">
-        `;
-        cate.list.forEach(item=>{
-            html += `
-            <div class="item software-item" data-name="${item.name}">
-                <div class="name">${item.name}</div>
-                <a href="${item.link}" target="_blank" class="btn">${item.btn}</a>
-            </div>
-            `;
-        })
-        html += "</div></div>";
-        wrap.innerHTML += html;
-    })
-}
-function toggleCategory(idx){
-    const allCat = document.querySelectorAll(".category");
-    allCat[idx].classList.toggle("open");
-}
+    <!-- 多媒体 -->
+    <div class="category">
+        <div class="cat-title" onclick="toggleCat('cat-media')">🎬 多媒体 <span>▼</span></div>
+        <div class="cat-body" id="cat-media">
+            <div class="soft-item"><div class="soft-name">VLC播放器</div><a href="https://www.videolan.org/vlc/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">PotPlayer</div><a href="https://potplayer.tv/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">OBS Studio</div><a href="https://obsproject.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">剪映专业版</div><a href="https://www.capcut.cn/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">格式工厂</div><a href="https://www.pcfreetime.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Bilibili PC版</div><a href="https://www.bilibili.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+        </div>
+    </div>
 
-// 搜索过滤
-function filterItem(){
-    const kw = document.getElementById("search").value.toLowerCase();
-    document.querySelectorAll(".software-item").forEach(el=>{
-        const name = el.dataset.name.toLowerCase();
-        if(name.includes(kw)) el.style.display="flex";
-        else el.style.display="none";
-    })
-}
+    <!-- 通讯社交 -->
+    <div class="category">
+        <div class="cat-title" onclick="toggleCat('cat-chat')">💬 通讯社交 <span>▼</span></div>
+        <div class="cat-body" id="cat-chat">
+            <div class="soft-item"><div class="soft-name">QQ PC版</div><a href="https://im.qq.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">微信PC版</div><a href="https://weixin.qq.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">企业微信PC版</div><a href="https://work.weixin.qq.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">腾讯会议</div><a href="https://meeting.tencent.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+        </div>
+    </div>
 
-// 实时时钟
-function clock(){
-    const now = new Date();
-    const str = now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,'0')+"-"+String(now.getDate()).padStart(2,'0')+" "+String(now.getHours()).padStart(2,'0')+":"+String(now.getMinutes()).padStart(2,'0')+":"+String(now.getSeconds()).padStart(2,'0');
-    const c1 = document.getElementById("clock");
-    const c2 = document.getElementById("adminClock");
-    if(c1) c1.innerText = str;
-    if(c2) c2.innerText = str;
-}
-setInterval(clock,1000);
+    <!-- 办公软件 -->
+    <div class="category">
+        <div class="cat-title" onclick="toggleCat('cat-office')">📄 办公软件 <span>▼</span></div>
+        <div class="cat-body" id="cat-office">
+            <div class="soft-item"><div class="soft-name">WPS</div><a href="https://www.wps.cn/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">LibreOffice</div><a href="https://zh-cn.libreoffice.org/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Office Tool Plus</div><a href="https://otp.landian.vip/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">PDF24 Editor</div><a href="https://www.pdf24.org/" target="_blank" class="down-btn">前往官方下载</a></div>
+        </div>
+    </div>
 
-// 后台逻辑
-function showAdminLogin(){
-    document.getElementById("frontPage").style.display="none";
-    document.getElementById("adminPage").style.display="block";
-    document.getElementById("loginForm").classList.remove("hidden");
-    document.getElementById("managePanel").classList.add("hidden");
-}
-function backHome(){
-    document.getElementById("frontPage").style.display="block";
-    document.getElementById("adminPage").style.display="none";
-}
-function adminLogin(){
-    const u = document.getElementById("adminUser").value;
-    const p = document.getElementById("adminPwd").value;
-    if(u==="admin" && p==="admin123"){
-        alert("✅ 登录成功！");
-        document.getElementById("loginForm").classList.add("hidden");
-        document.getElementById("managePanel").classList.remove("hidden");
-        renderManageList();
-    }else{
-        alert("❌账号或密码错误");
-    }
-}
-function logoutAdmin(){
-    alert("已退出登录");
-    backHome();
-}
-function renderManageList(){
-    const mlist = document.getElementById("manageList");
-    mlist.innerHTML = "<h2>📋 软件列表管理</h2>";
-    softwareData.forEach((cate,cateIdx)=>{
-        mlist.innerHTML += `<div style="background:var(--card);padding:16px;border-radius:12px;margin:12px 0;"><h3>${cate.cat}</h3>`;
-        cate.list.forEach((item,idx)=>{
-            mlist.innerHTML += `
-            <div class="manage-item">
-                <div><b>${item.name}</b></div>
-                <div style="margin:6px 0;font-size:13px">${item.link}</div>
-                <button onclick="delSoftware(${cateIdx},${idx})" style="padding:6px 10px;border:none;background:#dc2626;color:white;border-radius:6px;cursor:pointer;">删除</button>
-            </div>
-            `;
-        })
-        mlist.innerHTML += "</div>";
-    })
-}
-function addSoftware(){
-    const n = document.getElementById("newName").value.trim();
-    const l = document.getElementById("newLink").value.trim();
-    const b = document.getElementById("newBtnText").value;
-    if(!n || !l){
-        alert("名称和链接不能为空");
-        return;
-    }
-    // 默认加到最后一个分类
-    softwareData[softwareData.length-1].list.push({name:n,link:l,btn:b});
-    renderList();
-    renderManageList();
-    document.getElementById("newName").value="";
-    document.getElementById("newLink").value="";
-    alert("✅添加成功（仅本次浏览器生效，刷新页面复原）");
-}
-function delSoftware(cateIdx,idx){
-    if(!confirm("确认删除这个软件？")) return;
-    softwareData[cateIdx].list.splice(idx,1);
-    renderList();
-    renderManageList();
-}
+    <!-- 开发工具 -->
+    <div class="category">
+        <div class="cat-title" onclick="toggleCat('cat-dev')">👨‍💻 开发工具 <span>▼</span></div>
+        <div class="cat-body" id="cat-dev">
+            <div class="soft-item"><div class="soft-name">VS Code</div><a href="https://code.visualstudio.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Git</div><a href="https://git-scm.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">VirtualBox</div><a href="https://www.virtualbox.org/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Notepad++</div><a href="https://notepad-plus-plus.org/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Python</div><a href="https://www.python.org/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">VMware虚拟机</div><a href="https://www.vmware.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">MySQL</div><a href="https://www.mysql.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">FastGithub（Github加速工具）</div><a href="https://github.com/dotnetcore/FastGithub/releases" target="_blank" class="down-btn">GitHub Releases</a></div>
+            <div class="soft-item"><div class="soft-name">ZTools</div><a href="https://github.com/ZToolsCenter/ZTools/releases" target="_blank" class="down-btn">GitHub Releases</a></div>
+        </div>
+    </div>
 
-// 初始化
-loadTheme();
-renderList();
-clock();
-</script>
+    <!-- 网络工具 & 压缩 -->
+    <div class="category">
+        <div class="cat-title" onclick="toggleCat('cat-netzip')">📦 网络工具 & 压缩 <span>▼</span></div>
+        <div class="cat-body" id="cat-netzip">
+            <div class="soft-item"><div class="soft-name">IDM</div><a href="https://www.internetdownloadmanager.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">FDM</div><a href="https://www.freedownloadmanager.org/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">XDM</div><a href="https://github.com/subhra74/xdm" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">迅雷</div><a href="https://www.xunlei.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">7-Zip</div><a href="https://www.7-zip.org/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">WinRAR</div><a href="https://www.win-rar.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">360压缩</div><a href="https://yasuo.360.cn/" target="_blank" class="down-btn">前往官方下载</a></div>
+        </div>
+    </div>
+
+    <!-- 远程控制 -->
+    <div class="category">
+        <div class="cat-title" onclick="toggleCat('cat-remote')">🖥️ 远程控制 <span>▼</span></div>
+        <div class="cat-body" id="cat-remote">
+            <div class="soft-item"><div class="soft-name">UU远程（网易UU远程）</div><a href="https://uu.163.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">TeamViewer</div><a href="https://www.teamviewer.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">AnyDesk</div><a href="https://anydesk.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">向日葵远程控制</div><a href="https://sunlogin.oray.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">RustDesk</div><a href="https://rustdesk.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+        </div>
+    </div>
+
+    <!-- 游戏专用 -->
+    <div class="category">
+        <div class="cat-title" onclick="toggleCat('cat-game')">🎮 游戏专用 <span>▼</span></div>
+        <div class="cat-body" id="cat-game">
+            <div class="soft-item"><div class="soft-name">Steam</div><a href="https://store.steampowered.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">WeGame</div><a href="https://www.wegame.com.cn/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">外国游戏加速器</div><a href="" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">国内游戏加速器</div><a href="" target="_blank" class="down-btn">前往官方下载</a></div>
+        </div>
+    </div>
+
+    <!-- 手机APP专区 -->
+    <div class="category">
+        <div class="cat-title" onclick="toggleCat('cat-mobile')">📱 手机APP专区 <span>▼</span></div>
+        <div class="cat-body" id="cat-mobile">
+            <div class="soft-item"><div class="soft-name">豆包AI手机版</div><a href="https://www.doubao.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">微信手机版</div><a href="https://weixin.qq.com/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">夸克手机版</div><a href="https://www.quark.cn/" target="_blank" class="down-btn">前往官方下载</a></div>
+            <div class="soft-item"><div class="soft-name">Edge浏览器手机版</div><a href="https://www.microsoft.com/zh-cn/edge" target="_blank" class="down-btn">前往官方下载</a></div>
+        </div>
+    </div>
+
+    <!-- 常用网站板块 新增 -->
+    <div class="category">
+        <div class="cat-title" onclick="toggleCat('cat-weblink')">🌐 常用网站导航 <span>▼</span></div>
+        <div class="cat-body" id="cat-weblink">
+            <div class="soft-item"><div class="soft-name">🕒 大屏时钟 time.now</div><a href="https://time.now/zh/clock/" target="_blank" class="down-btn">打开网站</a></div>
+            <div class="soft-item"><div class="soft-name">📖 Archive.is（网页存档）</div><a href="https://archive.is/" target="_blank" class="down-btn">打开网站</a></div>
+            <div class="soft-item"><div class="soft-name">📖 Unpaywalled</div><a href="https://unpaywall.org/" target="_blank" class="down-btn">打开网站</a></div>
+            <div class="soft-item"><div class="soft-name">📖 RemovePaywall.com</div><a href="https://removepaywall.com/" target="_blank" class="down-btn">打开网站</a></div>
+            <div class="soft-item"><div class="soft-name">B站</div><a href="https://www.bilibili.com" target="_blank" class="down-btn">打开网站</a></div>
+            <div class="soft-item"><div class="soft-name">豆包官网</div><a href="https://www.doubao.com" target="_blank" class="down-btn">打开网站</a></div>
+            <div class="soft-item"><div class="soft-name">GitHub主页</div><a href="https://github.com" target="_blank" class="down-btn">打开网站</a></div>
+            <div class="soft-item"><div class="soft-name">清华TUNA镜像站</div><a href="https://mirrors.tuna.tsinghua.edu.cn" target="_blank" class="down-btn">打开网站</a></div>
+            <div class="soft-item"><div class="soft-name">中科大镜像站</div><a href="https://mirrors.ustc.edu.cn" target="_blank" class="down-btn">打开网站</a></div>
+            <div class="soft-item"><div class="soft-name">阿里云开源镜像</div><a href="https://developer.aliyun.com/mirror" target="_blank" class="down-btn">打开网站</a></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>免责提示：本站为静态资源导航站，不存储任何安装包、系统镜像。所有链接跳转至第三方官方/GitHub发布页；网站导航仅收录公开互联网站点。部分软件安装时请注意取消捆绑勾选。</p>
+        <p style="margin-top:8px">交流QQ群：<a href="tencent://message/?uin=1053792157" target="_blank">1053792157</a></p>
+        <p style="margin-top:8px">本网站源码：<a href="https://github.com/gxmsimon/html" target="_blank">https://github.com/gxmsimon/html</a></p>
+    </footer>
 </body>
 </html>
